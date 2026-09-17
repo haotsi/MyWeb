@@ -249,7 +249,7 @@ function SceneNavigation({ activeModule, onHover, onSelect }: {
     <group>
       {campusModules.map((item) => (
         <Html key={item.id} position={navigationAnchors[item.id]} center zIndexRange={[20, 10]}>
-          <div className="scene-nav-anchor">
+          <div className={`scene-nav-anchor scene-nav-anchor--${item.id}`}>
             <button
               type="button"
               className={`scene-nav-card${activeModule === item.id ? ' is-active' : ''}`}
