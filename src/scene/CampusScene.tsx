@@ -49,15 +49,9 @@ function Lamp({ position }: { position: [number, number, number] }) {
 function Bench({ position, rotation = 0 }: { position: [number, number, number], rotation?: number }) {
   return (
     <group position={position} rotation={[0, rotation, 0]}>
-      <mesh position={[0, 0.35, 0]} scale={[0.75, 0.08, 0.3]} castShadow>
-        <boxGeometry />
-        <meshStandardMaterial color={wood} />
-      </mesh>
-      <mesh position={[0, 0.7, -0.27]} scale={[0.75, 0.3, 0.07]} castShadow>
-        <boxGeometry />
-        <meshStandardMaterial color={wood} />
-      </mesh>
-      {[-0.55, 0.55].map((x) => <mesh key={x} position={[x, 0.16, 0]} scale={[0.06, 0.2, 0.24]}><boxGeometry /><meshStandardMaterial color="#38483f" /></mesh>)}
+      {[-0.22, 0, 0.22].map((z) => <mesh key={`seat-${z}`} position={[0, 0.46, z]} scale={[0.78, 0.045, 0.075]} castShadow><boxGeometry /><meshStandardMaterial color={wood} roughness={0.92} /></mesh>)}
+      {[-0.12, 0.1, 0.32].map((y) => <mesh key={`back-${y}`} position={[0, 0.78 + y, -0.29]} scale={[0.78, 0.045, 0.055]} castShadow><boxGeometry /><meshStandardMaterial color={wood} roughness={0.92} /></mesh>)}
+      {[-0.58, 0.58].map((x) => <group key={x} position={[x, 0, 0]}><mesh position={[0, 0.23, 0]} scale={[0.055, 0.23, 0.22]} castShadow><boxGeometry /><meshStandardMaterial color="#38483f" roughness={0.95} /></mesh><mesh position={[0, 0.72, -0.29]} rotation={[0, 0, -0.08]} scale={[0.05, 0.38, 0.05]} castShadow><boxGeometry /><meshStandardMaterial color="#38483f" roughness={0.95} /></mesh></group>)}
     </group>
   )
 }
@@ -91,7 +85,7 @@ function FocusGlow({ module }: { module: CampusModuleId }) {
 }
 
 const navigationAnchors: Record<CampusModuleId, [number, number, number]> = {
-  about: [0, 7.25, -1.9],
+  about: [0, 8.45, -1.9],
   projects: [5.1, 3.2, -1.75],
   logic: [-4.8, 3.15, -1.75],
   ai: [4.2, 1.2, 3.7],
@@ -155,17 +149,17 @@ export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleS
             <meshStandardMaterial color="#8eaa78" roughness={1} />
           </RoundedBox>
 
-          <mesh position={[0, 0.28, 3.7]} scale={[2.1, 0.1, 5.0]} receiveShadow>
-            <boxGeometry />
+          <mesh position={[0, 0.265, 3.7]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[3.5, 9.4]} />
             <meshStandardMaterial color="#d6d3c2" roughness={0.95} />
           </mesh>
-          <mesh position={[0, 0.31, 5.35]} scale={[5.6, 0.11, 1.25]} receiveShadow>
-            <boxGeometry />
+          <mesh position={[0, 0.27, 5.15]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[10.8, 1.7]} />
             <meshStandardMaterial color="#c4c8b5" roughness={1} />
           </mesh>
-          {[-1.38, -0.46, 0.46, 1.38].map((x) => (
-            <mesh key={x} position={[x, 0.42, 4.5]} scale={[0.04, 0.015, 4.1]}>
-              <boxGeometry />
+          {Array.from({ length: 9 }, (_, i) => 0.2 + i * 1.05).map((z) => (
+            <mesh key={z} position={[0, 0.276, z]} rotation={[-Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[3.28, 0.035]} />
               <meshStandardMaterial color="#aaa999" />
             </mesh>
           ))}
@@ -181,8 +175,8 @@ export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleS
           <Tree position={[-5.2, 0.25, 6.2]} scale={0.85} />
           <Tree position={[5.6, 0.25, 6.4]} scale={0.9} />
 
-          <Bench position={[-4.1, 0.35, 2.6]} rotation={0.2} />
-          <Bench position={[4.3, 0.35, 2.6]} rotation={-0.2} />
+          <Bench position={[-3.45, 0.28, 3.35]} rotation={0.08} />
+          <Bench position={[3.45, 0.28, 3.35]} rotation={-0.08} />
           <Lamp position={[-2.25, 0.32, 2.1]} />
           <Lamp position={[2.25, 0.32, 2.1]} />
           <Lamp position={[-2.25, 0.32, 6.4]} />
