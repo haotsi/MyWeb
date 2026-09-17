@@ -46,7 +46,7 @@ const moduleContent: Record<CampusModuleId, { lead: string, meta: string, body: 
   projects: {
     lead: '把知识，变成可以使用的东西。',
     meta: 'PROJECTS / BUILD',
-    body: <div className="module-list"><a href="https://haotsi.github.io/AI_Learning_Helper/" target="_blank" rel="noreferrer"><span><b>AI Learning Helper</b><small>多学科学习助手 · PWA</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/AI_Learning_Helper" target="_blank" rel="noreferrer"><span><b>AI Learning Helper Source</b><small>JavaScript · KaTeX · Responsive</small></span><em>源代码 ↗</em></a><a href="https://github.com/haotsi/course-advanced-programming" target="_blank" rel="noreferrer"><span><b>Advanced Programming</b><small>课程问题记录与代码练习</small></span><em>查看项目 ↗</em></a></div>,
+    body: <div className="module-list"><a href="https://haotsi.github.io/AI_Learning_Helper/" target="_blank" rel="noreferrer"><span><b>AI Learning Helper</b><small>多学科学习助手 · PWA</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/AI_Learning_Helper" target="_blank" rel="noreferrer"><span><b>AI Learning Helper Source</b><small>JavaScript · KaTeX · Responsive</small></span><em>源代码 ↗</em></a><a href="https://github.com/haotsi/Teyvat_Tatics" target="_blank" rel="noreferrer"><span><b>Teyvat_Tatics</b><small>原神主题战术游戏原型 · C++ · CMake</small></span><em>查看项目 ↗</em></a><a href="https://github.com/haotsi/course-advanced-programming" target="_blank" rel="noreferrer"><span><b>Advanced Programming</b><small>课程问题记录与代码练习</small></span><em>查看项目 ↗</em></a></div>,
   },
   logic: {
     lead: '沿着定义、推理与证明继续向前。',
