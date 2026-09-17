@@ -1,6 +1,8 @@
 import { Float, RoundedBox } from '@react-three/drei'
-import { useMemo } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
+import type { CampusModuleId } from '../navigation'
 
 const brick = '#66716b'
 const brickDark = '#4e5d57'
@@ -201,7 +203,35 @@ function Bench({ position, rotation = 0 }: { position: [number, number, number],
   )
 }
 
-export function CampusScene({ lowQuality }: { lowQuality: boolean }) {
+const highlightPositions: Record<CampusModuleId, [number, number, number]> = {
+  about: [0, 0.55, -2.1],
+  projects: [5.0, 0.5, -2.0],
+  logic: [-4.6, 0.5, -2.0],
+  ai: [4.0, 0.5, 3.9],
+  notes: [-5.0, 0.5, 1.1],
+  links: [0, 0.5, 5.7],
+}
+
+function FocusGlow({ module }: { module: CampusModuleId }) {
+  const ring = useRef<THREE.Mesh>(null)
+  const material = useRef<THREE.MeshBasicMaterial>(null)
+  useFrame(({ clock }) => {
+    const pulse = 1 + Math.sin(clock.elapsedTime * 2.6) * 0.09
+    ring.current?.scale.setScalar(pulse)
+    if (material.current) material.current.opacity = 0.3 + Math.sin(clock.elapsedTime * 2.6) * 0.08
+  })
+  return (
+    <group position={highlightPositions[module]}>
+      <mesh ref={ring} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[1.05, 1.38, 48]} />
+        <meshBasicMaterial ref={material} color="#e6f3c5" transparent opacity={0.35} depthWrite={false} side={THREE.DoubleSide} />
+      </mesh>
+      <pointLight position={[0, 2.2, 0]} intensity={3.2} distance={6} color="#d9edb7" />
+    </group>
+  )
+}
+
+export function CampusScene({ lowQuality, activeModule }: { lowQuality: boolean, activeModule: CampusModuleId | null }) {
   const pebbles = useMemo(() => Array.from({ length: lowQuality ? 8 : 20 }, (_, i) => ({
     x: Math.sin(i * 13.7) * 7.2,
     z: 2.5 + Math.cos(i * 8.3) * 4.6,
@@ -235,6 +265,7 @@ export function CampusScene({ lowQuality }: { lowQuality: boolean }) {
           ))}
 
           <NorthBuilding />
+          {activeModule && <FocusGlow key={activeModule} module={activeModule} />}
 
           <Tree position={[-8, 0.25, -4.7]} scale={1.18} />
           <Tree position={[-7.4, 0.25, 3.3]} scale={1.1} autumn />

@@ -1,7 +1,10 @@
-import { Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Suspense, useRef, type RefObject } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, Html, OrbitControls, PerformanceMonitor } from '@react-three/drei'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
+import * as THREE from 'three'
 import { CampusScene } from './CampusScene'
+import type { CampusModuleId } from '../navigation'
 
 function SceneLoader() {
   return (
@@ -14,7 +17,34 @@ function SceneLoader() {
   )
 }
 
-export default function CampusCanvas({ quality, onQualityDecline }: { quality: 'high' | 'low', onQualityDecline: () => void }) {
+function CameraRig({ controls, focusTarget, cameraPosition }: {
+  controls: RefObject<OrbitControlsImpl | null>
+  focusTarget: [number, number, number] | null
+  cameraPosition: [number, number, number] | null
+}) {
+  const desiredPosition = useRef(new THREE.Vector3())
+  const desiredTarget = useRef(new THREE.Vector3())
+
+  useFrame(({ camera }, delta) => {
+    if (!focusTarget || !cameraPosition || !controls.current) return
+    desiredPosition.current.set(...cameraPosition)
+    desiredTarget.current.set(...focusTarget)
+    const amount = 1 - Math.exp(-delta * 3.8)
+    camera.position.lerp(desiredPosition.current, amount)
+    controls.current.target.lerp(desiredTarget.current, amount)
+    controls.current.update()
+  })
+  return null
+}
+
+export default function CampusCanvas({ quality, onQualityDecline, activeModule, focusTarget, cameraPosition }: {
+  quality: 'high' | 'low'
+  onQualityDecline: () => void
+  activeModule: CampusModuleId | null
+  focusTarget: [number, number, number] | null
+  cameraPosition: [number, number, number] | null
+}) {
+  const controls = useRef<OrbitControlsImpl | null>(null)
   return (
     <Canvas
       className="campus-canvas"
@@ -41,10 +71,11 @@ export default function CampusCanvas({ quality, onQualityDecline }: { quality: '
         shadow-camera-bottom={-14}
       />
       <Suspense fallback={<SceneLoader />}>
-        <CampusScene lowQuality={quality === 'low'} />
+        <CampusScene lowQuality={quality === 'low'} activeModule={activeModule} />
         {quality === 'high' && <Environment preset="city" environmentIntensity={0.18} />}
       </Suspense>
       <OrbitControls
+        ref={controls}
         makeDefault
         enablePan={false}
         minZoom={32}
@@ -57,6 +88,7 @@ export default function CampusCanvas({ quality, onQualityDecline }: { quality: '
         enableDamping
         dampingFactor={0.055}
       />
+      <CameraRig controls={controls} focusTarget={focusTarget} cameraPosition={cameraPosition} />
     </Canvas>
   )
 }
