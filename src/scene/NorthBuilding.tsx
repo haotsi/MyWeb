@@ -79,6 +79,73 @@ function Ivy({ position, scale, rotation = [0, 0, 0] }: { position: [number, num
   )
 }
 
+function ArchedEntrance() {
+  return (
+    <group position={[0, 0, 1.825]}>
+      <mesh position={[0, 1.18, 0]} scale={[0.78, 1.12, 0.12]} castShadow>
+        <boxGeometry />
+        <meshStandardMaterial color={wood} roughness={0.82} />
+      </mesh>
+      <mesh position={[0, 2.3, 0.025]} castShadow>
+        <ringGeometry args={[0.56, 0.78, 32, 1, 0, Math.PI]} />
+        <meshStandardMaterial color={stone} roughness={0.88} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh position={[0, 2.25, 0.01]} scale={[0.55, 0.5, 0.07]} castShadow>
+        <circleGeometry args={[1, 24, 0, Math.PI]} />
+        <meshStandardMaterial color="#9aafa2" roughness={0.5} side={THREE.DoubleSide} />
+      </mesh>
+      {[-0.84, 0.84].map((x) => (
+        <mesh key={x} position={[x, 1.38, 0]} scale={[0.08, 1.36, 0.13]} castShadow>
+          <boxGeometry />
+          <meshStandardMaterial color={stone} roughness={0.9} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function StoneBalcony() {
+  const balusters = [-1.05, -0.7, -0.35, 0, 0.35, 0.7, 1.05]
+  return (
+    <group position={[0, 3.78, 1.98]}>
+      <mesh scale={[1.35, 0.1, 0.34]} castShadow>
+        <boxGeometry />
+        <meshStandardMaterial color={stone} roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 0.58, 0.22]} scale={[1.36, 0.08, 0.08]} castShadow>
+        <boxGeometry />
+        <meshStandardMaterial color="#e1e2d4" roughness={0.88} />
+      </mesh>
+      {balusters.map((x) => (
+        <mesh key={x} position={[x, 0.34, 0.22]} scale={[0.055, 0.28, 0.055]} castShadow>
+          <cylinderGeometry args={[1, 1.18, 2, 8]} />
+          <meshStandardMaterial color="#ddded0" roughness={0.9} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function TowerBrackets() {
+  const bracketXs = [-1.22, -0.74, -0.25, 0.25, 0.74, 1.22]
+  return (
+    <group position={[0, 5.63, 1.9]}>
+      {bracketXs.map((x) => (
+        <group key={x} position={[x, 0, 0]}>
+          <mesh rotation={[0, 0, -0.62]} scale={[0.07, 0.3, 0.07]} castShadow>
+            <boxGeometry />
+            <meshStandardMaterial color="#c7c8b9" roughness={0.9} />
+          </mesh>
+          <mesh position={[0, 0.22, 0]} scale={[0.14, 0.055, 0.1]} castShadow>
+            <boxGeometry />
+            <meshStandardMaterial color={stone} roughness={0.9} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  )
+}
+
 function ProceduralNorthBuilding() {
   const wingWindows = [-6.5, -5.45, -4.4, -3.35, 3.35, 4.4, 5.45, 6.5]
   const towerBands = [1.04, 3.82, 5.44]
@@ -97,6 +164,13 @@ function ProceduralNorthBuilding() {
         <meshStandardMaterial color="#2d433b" roughness={1} />
       </mesh>
       <GableRoof position={[0, 2.42, 0]} width={15.8} depth={3.75} height={1.32} />
+
+      {[0.7, 1.18, 1.66].map((y) => (
+        <mesh key={y} position={[0, y, 1.585]} scale={[7.35, 0.018, 0.025]}>
+          <boxGeometry />
+          <meshStandardMaterial color="#839088" roughness={1} />
+        </mesh>
+      ))}
 
       {wingWindows.map((x) => (
         <group key={x}>
@@ -121,20 +195,15 @@ function ProceduralNorthBuilding() {
             <meshStandardMaterial color={stone} roughness={0.92} />
           </mesh>
         ))}
-        <mesh position={[0, 1.28, 1.82]} scale={[0.78, 1.15, 0.12]} castShadow>
-          <boxGeometry />
-          <meshStandardMaterial color={wood} roughness={0.8} />
-        </mesh>
-        <mesh position={[0, 1.72, 1.96]} scale={[1.3, 0.15, 0.28]} castShadow>
-          <boxGeometry />
-          <meshStandardMaterial color={stone} />
-        </mesh>
+        <ArchedEntrance />
+        <StoneBalcony />
         {[-0.72, 0, 0.72].map((x) => <Window key={`lower-${x}`} position={[x, 3.05, 1.795]} scale={[0.28, 0.62, 0.06]} />)}
         {[-0.72, 0, 0.72].map((x) => <Window key={`upper-${x}`} position={[x, 4.45, 1.795]} scale={[0.25, 0.5, 0.06]} />)}
         <mesh position={[0, 5.76, 0]} scale={[1.78, 0.15, 2.02]} castShadow>
           <boxGeometry />
           <meshStandardMaterial color="#263a33" roughness={0.92} />
         </mesh>
+        <TowerBrackets />
         <mesh position={[0, 6.14, 0]} rotation={[0, Math.PI / 4, 0]} scale={[2.35, 1.2, 2.35]} castShadow>
           <coneGeometry args={[1, 0.75, 4]} />
           <meshStandardMaterial color={roof} roughness={0.9} />
@@ -163,6 +232,8 @@ function ProceduralNorthBuilding() {
       <Ivy position={[-1.45, 2.95, 1.75]} scale={[0.34, 1.75, 0.16]} rotation={[0, 0, -0.14]} />
       <Ivy position={[1.4, 2.4, 1.78]} scale={[0.28, 1.25, 0.15]} rotation={[0, 0, 0.2]} />
       <Ivy position={[-5.1, 1.45, 1.61]} scale={[0.22, 0.8, 0.12]} />
+      <Ivy position={[5.55, 1.35, 1.61]} scale={[0.18, 0.72, 0.11]} rotation={[0, 0, -0.18]} />
+      <Ivy position={[-6.15, 1.1, 1.62]} scale={[0.16, 0.58, 0.1]} rotation={[0, 0, 0.12]} />
     </group>
   )
 }
