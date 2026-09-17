@@ -125,7 +125,16 @@ export default function App() {
       <a className="skip-link" href="#scene-description">跳过 3D 场景</a>
       <div className="ambient ambient-left" aria-hidden="true" /><div className="ambient ambient-right" aria-hidden="true" />
       <Suspense fallback={<div className="canvas-fallback" aria-hidden="true" />}>
-        <CampusCanvas quality={quality} onQualityDecline={() => setQuality('low')} activeModule={activeSceneModule} focusTarget={homeResetting ? HOME_TARGET : focusConfig?.sceneTarget ?? null} cameraPosition={homeResetting ? HOME_CAMERA : focusConfig?.cameraPosition ?? null} />
+        <CampusCanvas
+          quality={quality}
+          onQualityDecline={() => setQuality('low')}
+          activeModule={activeSceneModule}
+          focusTarget={homeResetting ? HOME_TARGET : focusConfig?.sceneTarget ?? null}
+          cameraPosition={homeResetting ? HOME_CAMERA : focusConfig?.cameraPosition ?? null}
+          onModuleHover={setHoveredModule}
+          onModuleSelect={selectModule}
+          showNavigation={!currentModule}
+        />
       </Suspense>
       <header className="site-mark" aria-label="网站名称"><button type="button" onClick={returnHome} aria-label="返回数字校园首页"><span className="mark-seal">H</span><span><strong>haotsi</strong><small>DIGITAL CAMPUS</small></span></button></header>
       <AnimatePresence>

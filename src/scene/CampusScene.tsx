@@ -1,8 +1,8 @@
-import { Float, RoundedBox } from '@react-three/drei'
+import { Float, Html, RoundedBox } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import type { CampusModuleId } from '../navigation'
+import { campusModules, type CampusModule, type CampusModuleId } from '../navigation'
 
 const brick = '#66716b'
 const brickDark = '#4e5d57'
@@ -231,7 +231,54 @@ function FocusGlow({ module }: { module: CampusModuleId }) {
   )
 }
 
-export function CampusScene({ lowQuality, activeModule }: { lowQuality: boolean, activeModule: CampusModuleId | null }) {
+const navigationAnchors: Record<CampusModuleId, [number, number, number]> = {
+  about: [0, 7.25, -1.9],
+  projects: [5.1, 3.2, -1.75],
+  logic: [-4.8, 3.15, -1.75],
+  ai: [4.2, 1.2, 3.7],
+  notes: [-4.6, 1.25, 2.2],
+  links: [0, 1.0, 5.9],
+}
+
+function SceneNavigation({ activeModule, onHover, onSelect }: {
+  activeModule: CampusModuleId | null
+  onHover: (id: CampusModuleId | null) => void
+  onSelect: (item: CampusModule) => void
+}) {
+  return (
+    <group>
+      {campusModules.map((item) => (
+        <Html key={item.id} position={navigationAnchors[item.id]} center zIndexRange={[20, 10]}>
+          <div className="scene-nav-anchor">
+            <button
+              type="button"
+              className={`scene-nav-card${activeModule === item.id ? ' is-active' : ''}`}
+              onMouseEnter={() => onHover(item.id)}
+              onMouseLeave={() => onHover(null)}
+              onFocus={() => onHover(item.id)}
+              onBlur={() => onHover(null)}
+              onClick={() => onSelect(item)}
+              aria-label={`${item.title}：${item.subtitle}`}
+            >
+              <span className="scene-nav-index">{item.index}</span>
+              <span className="scene-nav-copy"><strong>{item.title}</strong><small>{item.subtitle}</small></span>
+              <span className="scene-nav-arrow" aria-hidden="true">↗</span>
+            </button>
+            <span className="scene-nav-line" aria-hidden="true"><i /></span>
+          </div>
+        </Html>
+      ))}
+    </group>
+  )
+}
+
+export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleSelect, showNavigation }: {
+  lowQuality: boolean
+  activeModule: CampusModuleId | null
+  onModuleHover: (id: CampusModuleId | null) => void
+  onModuleSelect: (item: CampusModule) => void
+  showNavigation: boolean
+}) {
   const pebbles = useMemo(() => Array.from({ length: lowQuality ? 8 : 20 }, (_, i) => ({
     x: Math.sin(i * 13.7) * 7.2,
     z: 2.5 + Math.cos(i * 8.3) * 4.6,
@@ -266,6 +313,7 @@ export function CampusScene({ lowQuality, activeModule }: { lowQuality: boolean,
 
           <NorthBuilding />
           {activeModule && <FocusGlow key={activeModule} module={activeModule} />}
+          {showNavigation && <SceneNavigation activeModule={activeModule} onHover={onModuleHover} onSelect={onModuleSelect} />}
 
           <Tree position={[-8, 0.25, -4.7]} scale={1.18} />
           <Tree position={[-7.4, 0.25, 3.3]} scale={1.1} autumn />

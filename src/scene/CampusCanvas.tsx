@@ -4,7 +4,7 @@ import { Environment, Html, OrbitControls, PerformanceMonitor } from '@react-thr
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import * as THREE from 'three'
 import { CampusScene } from './CampusScene'
-import type { CampusModuleId } from '../navigation'
+import type { CampusModule, CampusModuleId } from '../navigation'
 
 function SceneLoader() {
   return (
@@ -37,12 +37,15 @@ function CameraRig({ controls, focusTarget, cameraPosition }: {
   return null
 }
 
-export default function CampusCanvas({ quality, onQualityDecline, activeModule, focusTarget, cameraPosition }: {
+export default function CampusCanvas({ quality, onQualityDecline, activeModule, focusTarget, cameraPosition, onModuleHover, onModuleSelect, showNavigation }: {
   quality: 'high' | 'low'
   onQualityDecline: () => void
   activeModule: CampusModuleId | null
   focusTarget: [number, number, number] | null
   cameraPosition: [number, number, number] | null
+  onModuleHover: (id: CampusModuleId | null) => void
+  onModuleSelect: (item: CampusModule) => void
+  showNavigation: boolean
 }) {
   const controls = useRef<OrbitControlsImpl | null>(null)
   return (
@@ -71,7 +74,7 @@ export default function CampusCanvas({ quality, onQualityDecline, activeModule, 
         shadow-camera-bottom={-14}
       />
       <Suspense fallback={<SceneLoader />}>
-        <CampusScene lowQuality={quality === 'low'} activeModule={activeModule} />
+        <CampusScene lowQuality={quality === 'low'} activeModule={activeModule} onModuleHover={onModuleHover} onModuleSelect={onModuleSelect} showNavigation={showNavigation} />
         {quality === 'high' && <Environment preset="city" environmentIntensity={0.18} />}
       </Suspense>
       <OrbitControls
