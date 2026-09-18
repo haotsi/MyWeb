@@ -1,6 +1,6 @@
 import { Suspense, useRef, type RefObject } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, Html, OrbitControls, PerformanceMonitor } from '@react-three/drei'
+import { Html, OrbitControls, PerformanceMonitor } from '@react-three/drei'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import * as THREE from 'three'
 import { CampusScene } from './CampusScene'
@@ -61,6 +61,7 @@ export default function CampusCanvas({ quality, onQualityDecline, activeModule, 
       <color attach="background" args={['#edf3ef']} />
       <fog attach="fog" args={['#edf3ef', 31, 55]} />
       <ambientLight intensity={1.25} />
+      <hemisphereLight args={['#edf4ff', '#748267', 0.4]} />
       <directionalLight
         castShadow={quality === 'high'}
         position={[-8, 18, 12]}
@@ -68,6 +69,8 @@ export default function CampusCanvas({ quality, onQualityDecline, activeModule, 
         color="#fff9df"
         shadow-mapSize-width={quality === 'high' ? 2048 : 512}
         shadow-mapSize-height={quality === 'high' ? 2048 : 512}
+        shadow-bias={-0.00015}
+        shadow-normalBias={0.018}
         shadow-camera-left={-14}
         shadow-camera-right={14}
         shadow-camera-top={14}
@@ -75,7 +78,6 @@ export default function CampusCanvas({ quality, onQualityDecline, activeModule, 
       />
       <Suspense fallback={<SceneLoader />}>
         <CampusScene lowQuality={quality === 'low'} activeModule={activeModule} onModuleHover={onModuleHover} onModuleSelect={onModuleSelect} showNavigation={showNavigation} />
-        {quality === 'high' && <Environment preset="city" environmentIntensity={0.18} />}
       </Suspense>
       <OrbitControls
         ref={controls}

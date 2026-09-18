@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "model:build": "node scripts/build-north-building.mjs",
+    "model:check": "node scripts/verify-north-building.mjs",
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit -p tsconfig.app.json && vite build --config vite.config.ts",
     "preview": "vite preview --host 0.0.0.0"
