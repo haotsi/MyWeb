@@ -4,32 +4,7 @@ import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { campusModules, type CampusModule, type CampusModuleId } from '../navigation'
 import { NorthBuilding } from './NorthBuilding'
-
-const wood = '#784b32'
-
-function Tree({ position, scale = 1, autumn = false }: { position: [number, number, number], scale?: number, autumn?: boolean }) {
-  const crown = autumn ? '#aeb46a' : '#718b62'
-  return (
-    <group position={position} scale={scale}>
-      <mesh position={[0, 1.35, 0]} castShadow>
-        <cylinderGeometry args={[0.14, 0.22, 2.7, 7]} />
-        <meshStandardMaterial color="#755941" roughness={1} />
-      </mesh>
-      <mesh position={[0, 3.05, 0]} castShadow>
-        <icosahedronGeometry args={[1.22, 1]} />
-        <meshStandardMaterial color={crown} roughness={1} flatShading />
-      </mesh>
-      <mesh position={[-0.72, 2.78, 0.12]} castShadow>
-        <icosahedronGeometry args={[0.8, 1]} />
-        <meshStandardMaterial color={autumn ? '#c3bd72' : '#80976e'} roughness={1} flatShading />
-      </mesh>
-      <mesh position={[0.68, 2.78, -0.1]} castShadow>
-        <icosahedronGeometry args={[0.72, 1]} />
-        <meshStandardMaterial color={autumn ? '#9ca45f' : '#627e58'} roughness={1} flatShading />
-      </mesh>
-    </group>
-  )
-}
+import { Tree, Bench } from './GardenFurniture'
 
 function Lamp({ position }: { position: [number, number, number] }) {
   return (
@@ -42,16 +17,6 @@ function Lamp({ position }: { position: [number, number, number] }) {
         <sphereGeometry args={[0.18, 8, 6]} />
         <meshStandardMaterial color="#f2ddb0" emissive="#e3c68d" emissiveIntensity={0.4} />
       </mesh>
-    </group>
-  )
-}
-
-function Bench({ position, rotation = 0 }: { position: [number, number, number], rotation?: number }) {
-  return (
-    <group position={position} rotation={[0, rotation, 0]}>
-      {[-0.22, 0, 0.22].map((z) => <mesh key={`seat-${z}`} position={[0, 0.46, z]} scale={[0.78, 0.045, 0.075]} castShadow><boxGeometry /><meshStandardMaterial color={wood} roughness={0.92} /></mesh>)}
-      {[-0.12, 0.1, 0.32].map((y) => <mesh key={`back-${y}`} position={[0, 0.78 + y, -0.29]} scale={[0.78, 0.045, 0.055]} castShadow><boxGeometry /><meshStandardMaterial color={wood} roughness={0.92} /></mesh>)}
-      {[-0.58, 0.58].map((x) => <group key={x} position={[x, 0, 0]}><mesh position={[0, 0.23, 0]} scale={[0.055, 0.23, 0.22]} castShadow><boxGeometry /><meshStandardMaterial color="#38483f" roughness={0.95} /></mesh><mesh position={[0, 0.72, -0.29]} rotation={[0, 0, -0.08]} scale={[0.05, 0.38, 0.05]} castShadow><boxGeometry /><meshStandardMaterial color="#38483f" roughness={0.95} /></mesh></group>)}
     </group>
   )
 }
