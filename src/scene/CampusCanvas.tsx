@@ -37,8 +37,9 @@ function CameraRig({ controls, focusTarget, cameraPosition }: {
   return null
 }
 
-export default function CampusCanvas({ quality, onQualityDecline, activeModule, focusTarget, cameraPosition, onModuleHover, onModuleSelect, showNavigation }: {
+export default function CampusCanvas({ quality, onQualityDecline, activeModule, focusTarget, cameraPosition, onModuleHover, onModuleSelect, showNavigation, sceneVariant }: {
   quality: 'high' | 'low'
+  sceneVariant: 'north' | 'library'
   onQualityDecline: () => void
   activeModule: CampusModuleId | null
   focusTarget: [number, number, number] | null
@@ -77,7 +78,7 @@ export default function CampusCanvas({ quality, onQualityDecline, activeModule, 
         shadow-camera-bottom={-14}
       />
       <Suspense fallback={<SceneLoader />}>
-        <CampusScene lowQuality={quality === 'low'} activeModule={activeModule} onModuleHover={onModuleHover} onModuleSelect={onModuleSelect} showNavigation={showNavigation} />
+        <CampusScene lowQuality={quality === 'low'} activeModule={activeModule} onModuleHover={onModuleHover} onModuleSelect={onModuleSelect} showNavigation={showNavigation} sceneVariant={sceneVariant} />
       </Suspense>
       <OrbitControls
         ref={controls}

@@ -379,6 +379,11 @@ button { color: inherit; }
 .nav-card-copy strong { font: 500 .82rem/1.4 'Outfit', 'Microsoft YaHei', sans-serif; letter-spacing: 0; }
 .nav-card:hover, .nav-card.is-active { background: rgba(255,255,255,.72); box-shadow: none; }
 .scene-controls { left: auto; right: clamp(1.25rem, 4vw, 4rem); bottom: clamp(1.4rem, 4vw, 3.3rem); padding: .6rem .8rem; border-radius: 999px; background: rgba(255,255,255,.52); backdrop-filter: blur(12px); }
+.model-switcher { position: absolute; z-index: 8; right: clamp(1.25rem, 4vw, 4rem); bottom: clamp(5rem, 8vw, 7rem); display: flex; align-items: center; gap: .28rem; padding: .32rem; border: 1px solid rgba(255,255,255,.88); border-radius: .85rem; background: rgba(245,249,245,.82); box-shadow: 0 12px 32px rgba(42,68,59,.13); backdrop-filter: blur(18px); }
+.model-switcher > span { padding: 0 .65rem; color: #70877b; font-size: .68rem; letter-spacing: .08em; white-space: nowrap; }
+.model-switcher button { padding: .55rem .72rem; border: 0; border-radius: .58rem; background: transparent; color: #5d796d; font-size: .77rem; cursor: pointer; white-space: nowrap; transition: background .2s ease, color .2s ease; }
+.model-switcher button:hover { background: rgba(255,255,255,.68); }
+.model-switcher button[aria-pressed="true"] { background: #355b4e; color: #fff; box-shadow: 0 4px 12px rgba(42,68,59,.18); }
 .note-index > p { margin: 0 0 1.2rem; }
 .note-index > small { display: block; margin-top: 1rem; color: #789087; font-size: .72rem; }
 .note-tree { overflow: hidden; border: 1px solid rgba(43,70,61,.14); border-radius: 1rem; background: rgba(255,255,255,.46); }
@@ -408,6 +413,9 @@ button { color: inherit; }
   .campus-navigation { display: grid; inset: auto .7rem .75rem; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
   .nav-card { min-height: 2.7rem; justify-content: center; border-color: rgba(255,255,255,.86); border-radius: .7rem; background: rgba(247,250,247,.82); box-shadow: 0 8px 22px rgba(42,68,59,.1); }
   .nav-card-copy strong { font-size: .78rem; white-space: normal; text-align: center; }
+  .model-switcher { right: .7rem; bottom: 7.15rem; }
+  .model-switcher > span { display: none; }
+  .model-switcher button { padding: .47rem .55rem; font-size: .7rem; }
 }
 @media (max-width: 480px) {
   .scene-title { top: 11%; }

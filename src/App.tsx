@@ -6,6 +6,8 @@ import { campusModules, moduleByPath, type CampusModule, type CampusModuleId } f
 const CampusCanvas = lazy(() => import('./scene/CampusCanvas'))
 const HOME_CAMERA: [number, number, number] = [18, 15, 20]
 const HOME_TARGET: [number, number, number] = [0, 1.25, 0]
+const LIBRARY_CAMERA: [number, number, number] = [18, 16, 22]
+const LIBRARY_TARGET: [number, number, number] = [0, 2.9, 0]
 
 function NavigationCards({ active, onHover, onSelect }: {
   active: CampusModuleId | null
@@ -90,6 +92,7 @@ export default function App() {
   const [cameraFocus, setCameraFocus] = useState<CampusModuleId | null>(null)
   const [homeResetting, setHomeResetting] = useState(false)
   const [quality, setQuality] = useState<'high' | 'low'>('high')
+  const [sceneVariant, setSceneVariant] = useState<'north' | 'library'>('north')
   const navigationTimer = useRef<number | null>(null)
   const resetTimer = useRef<number | null>(null)
   const currentModule = moduleByPath[location.pathname]
@@ -117,6 +120,15 @@ export default function App() {
     if (resetTimer.current) window.clearTimeout(resetTimer.current)
     resetTimer.current = window.setTimeout(() => setHomeResetting(false), 1100)
   }
+  const switchScene = (variant: 'north' | 'library') => {
+    if (variant === sceneVariant) return
+    setSceneVariant(variant)
+    setHoveredModule(null)
+    setCameraFocus(null)
+    setHomeResetting(true)
+    if (resetTimer.current) window.clearTimeout(resetTimer.current)
+    resetTimer.current = window.setTimeout(() => setHomeResetting(false), 1100)
+  }
 
   return (
     <main className={`campus-shell${currentModule ? ' has-module-open' : ''}`}>
@@ -125,10 +137,11 @@ export default function App() {
       <Suspense fallback={<div className="canvas-fallback" aria-hidden="true" />}>
         <CampusCanvas
           quality={quality}
+          sceneVariant={sceneVariant}
           onQualityDecline={() => setQuality('low')}
           activeModule={activeSceneModule}
-          focusTarget={homeResetting ? HOME_TARGET : focusConfig?.sceneTarget ?? null}
-          cameraPosition={homeResetting ? HOME_CAMERA : focusConfig?.cameraPosition ?? null}
+          focusTarget={homeResetting ? (sceneVariant === 'library' ? LIBRARY_TARGET : HOME_TARGET) : sceneVariant === 'library' ? null : focusConfig?.sceneTarget ?? null}
+          cameraPosition={homeResetting ? (sceneVariant === 'library' ? LIBRARY_CAMERA : HOME_CAMERA) : sceneVariant === 'library' ? null : focusConfig?.cameraPosition ?? null}
           onModuleHover={setHoveredModule}
           onModuleSelect={selectModule}
           showNavigation={false}
@@ -139,11 +152,12 @@ export default function App() {
         {!currentModule && <motion.div key="campus-home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <section className="scene-title" aria-labelledby="campus-title"><p><span>南京大学 · 学习与创造</span><i /></p><h1 id="campus-title">你好，我是<br /><em>haotsi.</em></h1><p className="hero-lead">我从自己的学习问题出发，做工具、写代码，也记录推理与探索的过程。</p><div className="hero-actions"><button type="button" onClick={() => selectModule(campusModules[1])}>看我的作品 <span aria-hidden="true">↗</span></button><button type="button" onClick={() => selectModule(campusModules[4])}>浏览笔记目录 <span aria-hidden="true">→</span></button></div><div className="hero-feature"><span>精选实践 / 01</span><strong>AI Learning Helper</strong><small>把学习过程做成可用的工具</small></div></section>
           <NavigationCards active={hoveredModule} onHover={setHoveredModule} onSelect={selectModule} />
-          <div className="scene-controls" aria-label="场景操作提示"><span className="mouse-icon" aria-hidden="true" /><p>南京大学北大楼 · 拖动旋转模型</p></div>
+          <div className="model-switcher" role="group" aria-label="选择三维建筑模型"><span>建筑模型</span><button type="button" aria-pressed={sceneVariant === 'north'} onClick={() => switchScene('north')}>鼓楼 · 北大楼</button><button type="button" aria-pressed={sceneVariant === 'library'} onClick={() => switchScene('library')}>苏州 · 图书馆</button></div>
+          <div className="scene-controls" aria-label="场景操作提示"><span className="mouse-icon" aria-hidden="true" /><p>{sceneVariant === 'north' ? '南京大学北大楼' : '苏州校区图书馆 · 简化模型'} · 拖动旋转</p></div>
         </motion.div>}
       </AnimatePresence>
       <AnimatePresence mode="wait">{currentModule && <ModulePanel key={currentModule.id} item={currentModule} onClose={returnHome} />}</AnimatePresence>
-      <section className="sr-description" id="scene-description"><h2>haotsi 的个人作品主页</h2><p>这里展示项目、学习方向与笔记目录。三维北大楼是南京大学学习经历的视觉线索。</p></section>
+      <section className="sr-description" id="scene-description"><h2>haotsi 的个人作品主页</h2><p>这里展示项目、学习方向与笔记目录。三维场景可切换南京大学鼓楼校区北大楼与苏州校区图书馆。</p></section>
     </main>
   )
 }
