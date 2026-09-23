@@ -39,7 +39,7 @@ function CameraRig({ controls, focusTarget, cameraPosition }: {
 
 export default function CampusCanvas({ quality, onQualityDecline, activeModule, focusTarget, cameraPosition, onModuleHover, onModuleSelect, showNavigation, sceneVariant }: {
   quality: 'high' | 'low'
-  sceneVariant: 'north' | 'library'
+  sceneVariant: 'north' | 'nanyong'
   onQualityDecline: () => void
   activeModule: CampusModuleId | null
   focusTarget: [number, number, number] | null

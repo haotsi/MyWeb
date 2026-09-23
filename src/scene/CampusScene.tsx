@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import { campusModules, type CampusModule, type CampusModuleId } from '../navigation'
 import { NorthBuilding } from './NorthBuilding'
 import { Tree, Bench } from './GardenFurniture'
-import { SuzhouLibrary } from './SuzhouLibrary'
+import { NanyongBuilding } from './NanyongBuilding'
 
 function Lamp({ position }: { position: [number, number, number] }) {
   return (
@@ -93,7 +93,7 @@ function SceneNavigation({ activeModule, onHover, onSelect }: {
 
 export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleSelect, showNavigation, sceneVariant }: {
   lowQuality: boolean
-  sceneVariant: 'north' | 'library'
+  sceneVariant: 'north' | 'nanyong'
   activeModule: CampusModuleId | null
   onModuleHover: (id: CampusModuleId | null) => void
   onModuleSelect: (item: CampusModule) => void
@@ -108,7 +108,7 @@ export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleS
   return (
     <group position={[0, -1.25, 0]}>
       <Float speed={0.45} rotationIntensity={0.012} floatIntensity={0.09}>
-        {sceneVariant === 'library' ? <SuzhouLibrary /> : <group>
+        {sceneVariant === 'nanyong' ? <NanyongBuilding /> : <group>
           <RoundedBox args={[21, 0.75, 17]} radius={0.34} smoothness={3} position={[0, -0.42, 0]} castShadow receiveShadow>
             <meshStandardMaterial color="#c9cbb7" roughness={0.95} />
           </RoundedBox>
