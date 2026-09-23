@@ -1,6 +1,6 @@
 import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
-import { Bench, Tree } from './GardenFurniture'
+import { Tree } from './GardenFurniture'
 
 // Exterior massing follows NJU's description of two groups and a north-south atrium,
 // plus the architect's four U-shaped teaching courts and planted roof spine.
@@ -17,7 +17,6 @@ const atriumGlass = new THREE.MeshStandardMaterial({ color: '#7daba9', metalness
 const concrete = new THREE.MeshStandardMaterial({ color: '#d8d8ca', roughness: 0.95 })
 const paving = new THREE.MeshStandardMaterial({ color: '#c5c7b9', roughness: 0.98 })
 const grass = new THREE.MeshStandardMaterial({ color: '#829f73', roughness: 1 })
-const water = new THREE.MeshStandardMaterial({ color: '#668f93', metalness: 0.23, roughness: 0.27 })
 
 type Point = [number, number, number]
 
@@ -172,19 +171,13 @@ export function NanyongBuilding() {
           {[-2.4, -1.45, -0.5, 0.5, 1.45, 2.4].map((offset) => (
             <Box key={offset} position={[side * 5.1 + offset, 0.81, 6.9]} size={[0.14, 1.05, 0.14]} material={brickLight} shadow />
           ))}
-          <Tree position={[side * 9.7, 0.28, -6.75]} scale={0.66} />
-          <Tree position={[side * 9.7, 0.28, 5.65]} scale={0.61} autumn={side === 1} />
-          <Bench position={[side * 8.5, 0.34, 7.6]} rotation={side * 0.12} />
+          <Tree position={[side * 10.0, 0.24, -5.9]} scale={0.52} />
+          <Tree position={[side * 10.0, 0.24, 5.25]} scale={0.5} />
         </group>
       ))}
-      <Box position={[0, 0.25, 7.92]} size={[6.0, 0.085, 3.36]} material={paving} />
-      <Box position={[0, 0.3, 7.83]} size={[3.05, 0.03, 3.18]} material={concrete} />
-      {[-1, 1].map((side) => (
-        <group key={side}>
-          <Box position={[side * 7.1, 0.25, 8.2]} size={[2.5, 0.08, 1.95]} material={concrete} />
-          <Box position={[side * 7.1, 0.31, 8.2]} size={[2.24, 0.035, 1.68]} material={side === 1 ? water : grass} />
-        </group>
-      ))}
+      {/* Keep the U-shaped teaching entrance open as one paved forecourt. */}
+      <Box position={[0, 0.265, 8.06]} size={[18.3, 0.12, 2.71]} material={paving} />
+      <Box position={[0, 0.332, 8.06]} size={[3.05, 0.015, 2.71]} material={concrete} />
       <mesh position={[0, -0.82, 0]} receiveShadow>
         <planeGeometry args={[45, 42]} />
         <shadowMaterial transparent opacity={0.18} color="#53685d" />
