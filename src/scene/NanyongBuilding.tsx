@@ -109,6 +109,12 @@ function RoofGarden({ side, row }: { side: -1 | 1, row: -1 | 1 }) {
     <group>
       <Box position={[x, 0.46 + height, z]} size={[4.4, 0.07, 0.87]} material={grass} />
       <Box position={[x, 0.51 + height, z]} size={[0.54, 0.025, 0.9]} material={paving} />
+      {[-1, 1].map((edge) => (
+        <group key={edge}>
+          <Box position={[x + edge * 2.13, 0.53 + height, z]} size={[0.1, 0.14, 1.02]} material={brickLight} />
+          <Box position={[x, 0.53 + height, z + edge * 0.49]} size={[4.35, 0.14, 0.08]} material={brickLight} />
+        </group>
+      ))}
       {[-1, 1].map((step) => (
         <Box key={step} position={[x + step * 1.75, 0.54 + height, z]} size={[0.38, 0.16, 0.6]} material={brickLight} />
       ))}
@@ -180,8 +186,13 @@ export function NanyongBuilding() {
       {[-1, 1].map((side) => (
         <group key={side}>
           <Box position={[side * 5.1, 1.38, 6.55]} size={[5.7, 0.14, 0.97]} material={brickDark} shadow />
+          <Box position={[side * 5.1, 1.295, 6.55]} size={[5.5, 0.03, 0.84]} material={concrete} />
           {[-2.4, -1.45, -0.5, 0.5, 1.45, 2.4].map((offset) => (
-            <Box key={offset} position={[side * 5.1 + offset, 0.81, 6.9]} size={[0.14, 1.05, 0.14]} material={brickLight} shadow />
+            <group key={offset}>
+              <Box position={[side * 5.1 + offset, 0.81, 6.9]} size={[0.14, 1.05, 0.14]} material={brickLight} shadow />
+              <Box position={[side * 5.1 + offset, 0.34, 6.9]} size={[0.24, 0.12, 0.24]} material={concrete} />
+              <Box position={[side * 5.1 + offset, 1.31, 6.9]} size={[0.25, 0.09, 0.25]} material={brickLight} />
+            </group>
           ))}
           <Tree position={[side * 10.0, 0.24, -5.9]} scale={0.52} />
           <Tree position={[side * 10.0, 0.24, 5.25]} scale={0.5} />
