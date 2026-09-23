@@ -8,6 +8,17 @@ const HOME_CAMERA: [number, number, number] = [18, 15, 20]
 const HOME_TARGET: [number, number, number] = [0, 1.25, 0]
 const NANYONG_CAMERA: [number, number, number] = [18, 14, 21]
 const NANYONG_TARGET: [number, number, number] = [0, 1.65, 0]
+const NANYONG_FOCUS: Record<CampusModuleId, {
+  target: [number, number, number]
+  camera: [number, number, number]
+}> = {
+  about: { target: [0, 2.5, -0.5], camera: [12, 9.5, 14] },
+  projects: { target: [4.8, 1.7, -2.0], camera: [15, 8, 11] },
+  logic: { target: [-4.7, 1.6, -2.0], camera: [8, 9.2, 14] },
+  ai: { target: [4.8, 1.0, 3.3], camera: [14, 8, 16] },
+  notes: { target: [-5.1, 1.0, 3.2], camera: [6, 8, 17] },
+  links: { target: [0, 0.7, 7.2], camera: [10, 8, 19] },
+}
 
 function NavigationCards({ active, onHover, onSelect }: {
   active: CampusModuleId | null
@@ -99,6 +110,7 @@ export default function App() {
   const activeSceneModule = hoveredModule ?? cameraFocus ?? currentModule?.id ?? null
   const focusId = cameraFocus ?? currentModule?.id ?? null
   const focusConfig = useMemo(() => campusModules.find((item) => item.id === focusId) ?? null, [focusId])
+  const nanyongFocus = focusId ? NANYONG_FOCUS[focusId] : null
 
   useEffect(() => { document.title = currentModule ? `${currentModule.title} · haotsi` : 'haotsi · 作品与学习'; if (currentModule) setCameraFocus(currentModule.id) }, [currentModule])
   useEffect(() => () => {
@@ -140,8 +152,8 @@ export default function App() {
           sceneVariant={sceneVariant}
           onQualityDecline={() => setQuality('low')}
           activeModule={activeSceneModule}
-          focusTarget={homeResetting ? (sceneVariant === 'nanyong' ? NANYONG_TARGET : HOME_TARGET) : sceneVariant === 'nanyong' ? null : focusConfig?.sceneTarget ?? null}
-          cameraPosition={homeResetting ? (sceneVariant === 'nanyong' ? NANYONG_CAMERA : HOME_CAMERA) : sceneVariant === 'nanyong' ? null : focusConfig?.cameraPosition ?? null}
+          focusTarget={homeResetting ? (sceneVariant === 'nanyong' ? NANYONG_TARGET : HOME_TARGET) : sceneVariant === 'nanyong' ? nanyongFocus?.target ?? null : focusConfig?.sceneTarget ?? null}
+          cameraPosition={homeResetting ? (sceneVariant === 'nanyong' ? NANYONG_CAMERA : HOME_CAMERA) : sceneVariant === 'nanyong' ? nanyongFocus?.camera ?? null : focusConfig?.cameraPosition ?? null}
           onModuleHover={setHoveredModule}
           onModuleSelect={selectModule}
           showNavigation={false}

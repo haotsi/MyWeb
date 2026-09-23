@@ -16,6 +16,7 @@ const glass = new THREE.MeshStandardMaterial({ color: '#54727b', metalness: 0.24
 const atriumGlass = new THREE.MeshStandardMaterial({ color: '#7daba9', metalness: 0.2, roughness: 0.28, transparent: true, opacity: 0.75, depthWrite: false })
 const concrete = new THREE.MeshStandardMaterial({ color: '#d8d8ca', roughness: 0.95 })
 const paving = new THREE.MeshStandardMaterial({ color: '#c5c7b9', roughness: 0.98 })
+const pavingJoint = new THREE.MeshStandardMaterial({ color: '#b4b7a9', roughness: 1 })
 const grass = new THREE.MeshStandardMaterial({ color: '#829f73', roughness: 1 })
 
 type Point = [number, number, number]
@@ -55,8 +56,12 @@ function TeachingWing({ x, z, width, depth, height }: {
               <group key={side}>
                 <Box position={[x, y, z + side * (depth / 2 + 0.017)]} size={[width - 0.24, floorHeight * 0.53, 0.045]} material={frame} />
                 <Box position={[x, y, z + side * (depth / 2 + 0.048)]} size={[width - 0.37, floorHeight * 0.43, 0.045]} material={glass} />
+                <Box position={[x, y, z + side * (depth / 2 + 0.078)]} size={[width - 0.24, 0.035, 0.06]} material={frame} />
+                <Box position={[x, y - floorHeight * 0.32, z + side * (depth / 2 + 0.07)]} size={[width - 0.15, 0.055, 0.15]} material={brickLight} />
                 <Box position={[x + side * (width / 2 + 0.017), y, z]} size={[0.045, floorHeight * 0.53, depth - 0.24]} material={frame} />
                 <Box position={[x + side * (width / 2 + 0.048), y, z]} size={[0.045, floorHeight * 0.43, depth - 0.37]} material={glass} />
+                <Box position={[x + side * (width / 2 + 0.078), y, z]} size={[0.06, 0.035, depth - 0.24]} material={frame} />
+                <Box position={[x + side * (width / 2 + 0.07), y - floorHeight * 0.32, z]} size={[0.15, 0.055, depth - 0.15]} material={brickLight} />
               </group>
             ))}
           </group>
@@ -145,8 +150,15 @@ function CentralAtrium() {
           <Box key={z} position={[0, 0.18, z]} size={[0.96, 0.025, 0.045]} material={brickLight} />
         ))}
       </group>
-      <Box position={[0, 0.58, 5.97]} size={[2.25, 0.8, 0.085]} material={glass} />
-      <Box position={[0, 1.05, 6.1]} size={[3.2, 0.13, 1.0]} material={concrete} shadow />
+      <Box position={[0, 1.05, 5.97]} size={[2.65, 1.48, 0.085]} material={glass} />
+      {[-1.35, -0.45, 0.45, 1.35].map((x) => (
+        <Box key={x} position={[x, 1.05, 6.035]} size={[0.075, 1.52, 0.075]} material={brickLight} />
+      ))}
+      <Box position={[0, 1.81, 6.04]} size={[2.85, 0.1, 0.12]} material={brickLight} />
+      <Box position={[0, 1.95, 6.13]} size={[3.4, 0.15, 1.08]} material={concrete} shadow />
+      {[-0.12, 0.12].map((x) => (
+        <Box key={x} position={[x, 0.9, 6.09]} size={[0.025, 0.22, 0.035]} material={brickLight} />
+      ))}
     </group>
   )
 }
@@ -178,6 +190,12 @@ export function NanyongBuilding() {
       {/* Keep the U-shaped teaching entrance open as one paved forecourt. */}
       <Box position={[0, 0.265, 8.06]} size={[18.3, 0.12, 2.71]} material={paving} />
       <Box position={[0, 0.332, 8.06]} size={[3.05, 0.015, 2.71]} material={concrete} />
+      {[-6.1, -3.05, 3.05, 6.1].map((x) => (
+        <Box key={x} position={[x, 0.327, 8.06]} size={[0.018, 0.008, 2.68]} material={pavingJoint} />
+      ))}
+      {[7.23, 8.13, 9.03].map((z) => (
+        <Box key={z} position={[0, 0.327, z]} size={[18.2, 0.008, 0.018]} material={pavingJoint} />
+      ))}
       <mesh position={[0, -0.82, 0]} receiveShadow>
         <planeGeometry args={[45, 42]} />
         <shadowMaterial transparent opacity={0.18} color="#53685d" />

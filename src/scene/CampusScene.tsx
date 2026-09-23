@@ -1,6 +1,6 @@
 import { Float, Html, RoundedBox } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { useLayoutEffect, useMemo, useRef, type ReactNode } from 'react'
 import * as THREE from 'three'
 import { campusModules, type CampusModule, type CampusModuleId } from '../navigation'
 import { NorthBuilding } from './NorthBuilding'
@@ -91,6 +91,67 @@ function SceneNavigation({ activeModule, onHover, onSelect }: {
   )
 }
 
+function SceneLayer({ active, direction, children }: { active: boolean, direction: number, children: ReactNode }) {
+  const group = useRef<THREE.Group>(null)
+  const opacity = useRef(active ? 1 : 0)
+  const materials = useRef<{ material: THREE.Material, opacity: number, transparent: boolean, depthWrite: boolean }[]>([])
+  const shadows = useRef<{ mesh: THREE.Mesh, castShadow: boolean }[]>([])
+
+  useLayoutEffect(() => {
+    const root = group.current
+    if (!root) return
+    const originals: { mesh: THREE.Mesh, material: THREE.Material | THREE.Material[] }[] = []
+    const cloned = new Map<THREE.Material, THREE.Material>()
+    root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return
+      originals.push({ mesh: object, material: object.material })
+      shadows.current.push({ mesh: object, castShadow: object.castShadow })
+      const copy = (material: THREE.Material) => {
+        let instance = cloned.get(material)
+        if (!instance) {
+          instance = material.clone()
+          cloned.set(material, instance)
+          materials.current.push({ material: instance, opacity: material.opacity, transparent: material.transparent, depthWrite: material.depthWrite })
+        }
+        return instance
+      }
+      object.material = Array.isArray(object.material) ? object.material.map(copy) : copy(object.material)
+    })
+    root.visible = active
+    return () => {
+      originals.forEach(({ mesh, material }) => { mesh.material = material })
+      cloned.forEach((material) => material.dispose())
+      materials.current = []
+      shadows.current = []
+    }
+  }, [])
+
+  useFrame((_, delta) => {
+    const root = group.current
+    if (!root) return
+    const target = active ? 1 : 0
+    const next = THREE.MathUtils.damp(opacity.current, target, 5.5, delta)
+    opacity.current = Math.abs(next - target) < 0.002 ? target : next
+    const value = opacity.current
+    root.visible = value > 0.002
+    root.position.y = (1 - value) * -0.32
+    root.rotation.y = (1 - value) * direction * 0.06
+    root.scale.setScalar(0.95 + value * 0.05)
+    for (const { material, opacity: originalOpacity, transparent, depthWrite } of materials.current) {
+      const needsTransparency = value < 0.999 || transparent
+      if (material.transparent !== needsTransparency) {
+        material.transparent = needsTransparency
+        material.needsUpdate = true
+      }
+      material.opacity = originalOpacity * value
+      material.depthWrite = value >= 0.999 ? depthWrite : false
+    }
+    for (const { mesh, castShadow } of shadows.current) mesh.castShadow = value >= 0.98 && castShadow
+  })
+
+  return <group ref={group}>{children}</group>
+}
+
 export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleSelect, showNavigation, sceneVariant }: {
   lowQuality: boolean
   sceneVariant: 'north' | 'nanyong'
@@ -108,7 +169,8 @@ export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleS
   return (
     <group position={[0, -1.25, 0]}>
       <Float speed={0.45} rotationIntensity={0.012} floatIntensity={0.09}>
-        {sceneVariant === 'nanyong' ? <NanyongBuilding /> : <group>
+        <SceneLayer active={sceneVariant === 'nanyong'} direction={1}><NanyongBuilding /></SceneLayer>
+        <SceneLayer active={sceneVariant === 'north'} direction={-1}><group>
           <RoundedBox args={[21, 0.75, 17]} radius={0.34} smoothness={3} position={[0, -0.42, 0]} castShadow receiveShadow>
             <meshStandardMaterial color="#c9cbb7" roughness={0.95} />
           </RoundedBox>
@@ -132,8 +194,6 @@ export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleS
           ))}
 
           <NorthBuilding />
-          {activeModule && <FocusGlow key={activeModule} module={activeModule} />}
-          {showNavigation && <SceneNavigation activeModule={activeModule} onHover={onModuleHover} onSelect={onModuleSelect} />}
 
           <Tree position={[-8, 0.25, -4.7]} scale={1.18} />
           <Tree position={[-7.4, 0.25, 3.3]} scale={1.1} autumn />
@@ -160,7 +220,9 @@ export function CampusScene({ lowQuality, activeModule, onModuleHover, onModuleS
             <planeGeometry args={[45, 42]} />
             <shadowMaterial transparent opacity={0.18} color="#53685d" />
           </mesh>
-        </group>}
+        </group></SceneLayer>
+        {sceneVariant === 'north' && activeModule && <FocusGlow key={activeModule} module={activeModule} />}
+        {sceneVariant === 'north' && showNavigation && <SceneNavigation activeModule={activeModule} onHover={onModuleHover} onSelect={onModuleSelect} />}
       </Float>
     </group>
   )
