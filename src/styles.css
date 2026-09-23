@@ -45,6 +45,7 @@ button { color: inherit; }
 .campus-canvas { position: absolute !important; inset: 0; z-index: 1; transition: filter .55s ease, transform .7s ease; }
 .has-module-open .campus-canvas { filter: saturate(.72) brightness(.9); transform: scale(1.018); }
 .canvas-fallback { position: absolute; inset: 0; z-index: 1; background: rgba(237, 243, 239, .45); }
+.scene-switch-veil { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(circle at 58% 48%, #edf3ef 48%, #e9f1f0 100%); }
 .ambient { position: absolute; width: 34vw; height: 34vw; border-radius: 50%; filter: blur(70px); opacity: .35; pointer-events: none; }
 .ambient-left { left: -14vw; top: 28vh; background: #afd9eb; }
 .ambient-right { right: -11vw; bottom: -12vw; background: #c9e5d6; }
