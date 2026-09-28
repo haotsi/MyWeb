@@ -59,7 +59,7 @@ const moduleContent: Record<CampusModuleId, { lead: string, meta: string, body: 
   projects: {
     lead: '把知识，变成可以使用的东西。',
     meta: 'PROJECTS / BUILD',
-    body: <div className="module-list"><a href="https://haotsi.github.io/AI_Learning_Helper/" target="_blank" rel="noreferrer"><span><b>AI Learning Helper</b><small>多学科学习助手 · PWA</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/AI_Learning_Helper" target="_blank" rel="noreferrer"><span><b>AI Learning Helper Source</b><small>JavaScript · KaTeX · Responsive</small></span><em>源代码 ↗</em></a><a href="https://github.com/haotsi/Teyvat_Tatics" target="_blank" rel="noreferrer"><span><b>Teyvat_Tatics</b><small>原神主题战术游戏原型 · C++ · CMake</small></span><em>查看项目 ↗</em></a><a href="https://github.com/haotsi/course-advanced-programming" target="_blank" rel="noreferrer"><span><b>Advanced Programming</b><small>课程问题记录与代码练习</small></span><em>查看项目 ↗</em></a></div>,
+    body: <div className="module-list"><a href="https://haotsi.github.io/Mid-autumn/" target="_blank" rel="noreferrer"><span><b>月满金陵 · 北大楼中秋夜</b><small>北大楼中秋主题 3D 场景 · Three.js</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/Mid-autumn" target="_blank" rel="noreferrer"><span><b>Mid-autumn Source</b><small>交互式校园赏月场景 · GitHub</small></span><em>查看源码 ↗</em></a><a href="https://haotsi.github.io/AI_Learning_Helper/" target="_blank" rel="noreferrer"><span><b>AI Learning Helper</b><small>多学科学习助手 · PWA</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/AI_Learning_Helper" target="_blank" rel="noreferrer"><span><b>AI Learning Helper Source</b><small>JavaScript · KaTeX · Responsive</small></span><em>源代码 ↗</em></a><a href="https://github.com/haotsi/Teyvat_Tatics" target="_blank" rel="noreferrer"><span><b>Teyvat_Tatics</b><small>原神主题战术游戏原型 · C++ · CMake</small></span><em>查看项目 ↗</em></a><a href="https://github.com/haotsi/course-advanced-programming" target="_blank" rel="noreferrer"><span><b>Advanced Programming</b><small>课程问题记录与代码练习</small></span><em>查看项目 ↗</em></a></div>,
   },
   logic: {
     lead: '沿着定义、推理与证明继续向前。',
@@ -74,7 +74,7 @@ const moduleContent: Record<CampusModuleId, { lead: string, meta: string, body: 
   notes: {
     lead: '学习有迹可循。',
     meta: 'NOTES / INDEX',
-    body: <div className="note-index"><p>这是我的 Obsidian 笔记库目录预览。网站只展示课程与主题层级，不提供笔记正文或文件下载。</p><div className="note-tree" aria-label="学习笔记目录结构"><div className="note-tree-root">学习笔记 <span>/</span></div><div className="note-tree-group"><strong>1-2</strong><ul><li>人工智能导论大作业</li><li>数字系统</li><li>思政</li><li>英语</li><li>cpp</li></ul></div><div className="note-tree-group"><strong>2-1</strong><ul><li>逻辑与推理</li><li>CPL</li><li>DSA</li></ul></div><div className="note-tree-group"><strong>FERM</strong><span>专题笔记</span></div></div><small>仅展示目录；个人笔记内容未加入网站构建。</small></div>,
+    body: <div className="note-index"><p>这是我的 Obsidian 笔记库目录预览。网站只展示课程与主题层级，不提供笔记正文或文件下载。</p><div className="note-tree" aria-label="学习笔记目录结构"><div className="note-tree-root">学习笔记 <span>/</span></div><div className="note-tree-group"><strong>1-2</strong><ul><li>人工智能导论大作业</li><li>数字系统</li><li>思政</li><li>英语</li><li>cpp</li></ul></div><div className="note-tree-group"><strong>2-1</strong><ul><li>逻辑与推理</li><li>DSA</li></ul></div><div className="note-tree-group"><strong>FERM</strong><span>专题笔记</span></div></div><small>仅展示目录；个人笔记内容未加入网站构建。</small></div>,
   },
   links: {
     lead: '继续了解我的作品与实践。',
