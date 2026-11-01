@@ -59,7 +59,7 @@ const moduleContent: Record<CampusModuleId, { lead: string, meta: string, body: 
   projects: {
     lead: '把知识，变成可以使用的东西。',
     meta: 'PROJECTS / BUILD',
-    body: <div className="module-list"><a href="https://haotsi.github.io/AI_Learning_Helper/" target="_blank" rel="noreferrer"><span><b>AI Learning Helper</b><small>多学科学习助手 · PWA</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/AI_Learning_Helper" target="_blank" rel="noreferrer"><span><b>AI Learning Helper Source</b><small>JavaScript · KaTeX · Responsive</small></span><em>源代码 ↗</em></a><a href="https://github.com/haotsi/Teyvat_Tatics" target="_blank" rel="noreferrer"><span><b>Teyvat_Tatics</b><small>原神主题战术游戏原型 · C++ · CMake</small></span><em>查看项目 ↗</em></a><a href="https://github.com/haotsi/course-advanced-programming" target="_blank" rel="noreferrer"><span><b>Advanced Programming</b><small>课程问题记录与代码练习</small></span><em>查看项目 ↗</em></a></div>,
+    body: <div className="module-list"><a href="https://haotsi.github.io/Mid-autumn/" target="_blank" rel="noreferrer"><span><b>月满金陵 · 北大楼中秋夜</b><small>北大楼中秋主题 3D 场景 · Three.js</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/Mid-autumn" target="_blank" rel="noreferrer"><span><b>Mid-autumn Source</b><small>交互式校园赏月场景 · GitHub</small></span><em>查看源码 ↗</em></a><a href="https://haotsi.github.io/AI_Learning_Helper/" target="_blank" rel="noreferrer"><span><b>AI Learning Helper</b><small>多学科学习助手 · PWA</small></span><em>在线体验 ↗</em></a><a href="https://github.com/haotsi/AI_Learning_Helper" target="_blank" rel="noreferrer"><span><b>AI Learning Helper Source</b><small>JavaScript · KaTeX · Responsive</small></span><em>源代码 ↗</em></a><a href="https://github.com/haotsi/Teyvat_Tatics" target="_blank" rel="noreferrer"><span><b>Teyvat_Tatics</b><small>原神主题战术游戏原型 · C++ · CMake</small></span><em>查看项目 ↗</em></a><a href="https://github.com/haotsi/course-advanced-programming" target="_blank" rel="noreferrer"><span><b>Advanced Programming</b><small>课程问题记录与代码练习</small></span><em>查看项目 ↗</em></a></div>,
   },
   logic: {
     lead: '沿着定义、推理与证明继续向前。',
@@ -104,6 +104,8 @@ export default function App() {
   const [homeResetting, setHomeResetting] = useState(false)
   const [quality, setQuality] = useState<'high' | 'low'>('high')
   const [sceneVariant, setSceneVariant] = useState<'north' | 'nanyong'>('north')
+  const [pendingVariant, setPendingVariant] = useState<'north' | 'nanyong' | null>(null)
+  const pendingVariantRef = useRef<'north' | 'nanyong' | null>(null)
   const navigationTimer = useRef<number | null>(null)
   const resetTimer = useRef<number | null>(null)
   const currentModule = moduleByPath[location.pathname]
@@ -111,6 +113,7 @@ export default function App() {
   const focusId = cameraFocus ?? currentModule?.id ?? null
   const focusConfig = useMemo(() => campusModules.find((item) => item.id === focusId) ?? null, [focusId])
   const nanyongFocus = focusId ? NANYONG_FOCUS[focusId] : null
+  const selectedVariant = pendingVariant ?? sceneVariant
 
   useEffect(() => { document.title = currentModule ? `${currentModule.title} · haotsi` : 'haotsi · 作品与学习'; if (currentModule) setCameraFocus(currentModule.id) }, [currentModule])
   useEffect(() => () => {
@@ -133,8 +136,20 @@ export default function App() {
     resetTimer.current = window.setTimeout(() => setHomeResetting(false), 1100)
   }
   const switchScene = (variant: 'north' | 'nanyong') => {
-    if (variant === sceneVariant) return
+    if (variant === sceneVariant) {
+      pendingVariantRef.current = null
+      setPendingVariant(null)
+      return
+    }
+    pendingVariantRef.current = variant
+    setPendingVariant(variant)
+  }
+  const finishSceneCover = () => {
+    const variant = pendingVariantRef.current
+    if (!variant) return
+    pendingVariantRef.current = null
     setSceneVariant(variant)
+    setPendingVariant(null)
     setHoveredModule(null)
     setCameraFocus(null)
     setHomeResetting(true)
@@ -159,12 +174,20 @@ export default function App() {
           showNavigation={false}
         />
       </Suspense>
+      <motion.div
+        className="scene-switch-veil"
+        aria-hidden="true"
+        initial={false}
+        animate={{ opacity: pendingVariant ? 1 : 0 }}
+        transition={{ duration: pendingVariant ? 0.24 : 0.48, ease: [0.22, 1, 0.36, 1] }}
+        onAnimationComplete={(definition) => { if (!Array.isArray(definition) && typeof definition === 'object' && definition.opacity === 1) finishSceneCover() }}
+      />
       <header className="site-mark" aria-label="网站名称"><button type="button" onClick={returnHome} aria-label="返回首页"><span className="mark-seal">H</span><span><strong>haotsi</strong><small>PORTFOLIO / LEARNING</small></span></button></header>
       <AnimatePresence>
         {!currentModule && <motion.div key="campus-home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <section className="scene-title" aria-labelledby="campus-title"><p><span>南京大学 · 学习与创造</span><i /></p><h1 id="campus-title">你好，我是<br /><em>haotsi.</em></h1><p className="hero-lead">我从自己的学习问题出发，做工具、写代码，也记录推理与探索的过程。</p><div className="hero-actions"><button type="button" onClick={() => selectModule(campusModules[1])}>看我的作品 <span aria-hidden="true">↗</span></button><button type="button" onClick={() => selectModule(campusModules[4])}>浏览笔记目录 <span aria-hidden="true">→</span></button></div><div className="hero-feature"><span>精选实践 / 01</span><strong>AI Learning Helper</strong><small>把学习过程做成可用的工具</small></div></section>
           <NavigationCards active={hoveredModule} onHover={setHoveredModule} onSelect={selectModule} />
-          <div className="model-switcher" role="group" aria-label="选择三维建筑模型"><span>建筑模型</span><button type="button" aria-pressed={sceneVariant === 'north'} onClick={() => switchScene('north')}>鼓楼 · 北大楼</button><button type="button" aria-pressed={sceneVariant === 'nanyong'} onClick={() => switchScene('nanyong')}>苏州 · 南雍楼</button></div>
+          <div className="model-switcher" role="group" aria-label="选择三维建筑模型"><span>建筑模型</span><button type="button" aria-pressed={selectedVariant === 'north'} onClick={() => switchScene('north')}>鼓楼 · 北大楼</button><button type="button" aria-pressed={selectedVariant === 'nanyong'} onClick={() => switchScene('nanyong')}>苏州 · 南雍楼</button></div>
           <div className="scene-controls" aria-label="场景操作提示"><span className="mouse-icon" aria-hidden="true" /><p>{sceneVariant === 'north' ? '南京大学北大楼' : '苏州校区南雍楼 · 外观示意'} · 拖动旋转</p></div>
         </motion.div>}
       </AnimatePresence>
