@@ -21,4 +21,4 @@
 - Obsidian safe directory overview: unchanged since the previous review; note contents and attachments were not read.
 - Website change: added the new project links to the portfolio.
 - Verification and publishing: TypeScript/Vite production build succeeded; Sites production version 23 deployed successfully at https://haotsi-portfolio.kevinhaotsi.chatgpt.site/.
-- GitHub Pages artifact: not rebuilt in this sync; its checked-in dist bundle remains unchanged.
+- GitHub Pages follow-up: rebuilt the production bundle from current GitHub main source on 2026-11-22; the Pages deployment workflow will be checked after the commit.
