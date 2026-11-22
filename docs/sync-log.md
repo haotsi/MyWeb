@@ -21,4 +21,13 @@
 - Obsidian safe directory overview: unchanged since the previous review; note contents and attachments were not read.
 - Website change: added the new project links to the portfolio.
 - Verification and publishing: TypeScript/Vite production build succeeded; Sites production version 23 deployed successfully at https://haotsi-portfolio.kevinhaotsi.chatgpt.site/.
-- GitHub Pages follow-up: rebuilt the production bundle from current GitHub main source on 2026-11-22; the Pages deployment workflow will be checked after the commit.
+- GitHub Pages follow-up: rebuilt the production bundle from current GitHub main source; the Pages workflow succeeded for the rebuilt assets.
+
+## 2026-11-22
+
+- Public source review: no new portfolio project was found. The [AIHub](https://github.com/haotsi/AIHub) feed received a routine public snapshot update at commit [5f32429](https://github.com/haotsi/AIHub/commit/5f32429bc5718ba8e92ee48dfdf82a30d4cacd93); existing project links and descriptions remain current.
+- Obsidian safe directory overview: the `CPL` course folder reappeared under `2-1`; only course/topic directory names were compared, and note contents and attachments were not read.
+- Website change: added `CPL` to the public notes directory outline.
+- Verification: `npm run build` completed successfully. Vite reported its existing large 3D chunk advisory.
+- GitHub Pages: rebuilt assets from the current main source and deployed successfully for commit [c2346cb](https://github.com/haotsi/MyWeb/commit/c2346cb08c32a2ccf4a423b703674ed09e268459).
+- Sites hosting: the source sync could not complete because the Sites source remote failed to resolve; production remains at version 23, so the CPL directory update is not yet live there.
